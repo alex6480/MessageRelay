@@ -36,6 +36,12 @@ function socketClosed(id: string, e: WebSocket.CloseEvent) {
 
 function messageReceived(id: string, e: WebSocket.MessageEvent) {
     var packet = JSON.parse(e.data.toString()) as IPacket;
+    if (packet.type === "syncronize-time-packet") {
+        sockets[id].send(JSON.stringify({
+            type: "syncronize-time-packet",
+            time: (new Date()).getTime(),
+        }));
+    }
     broadcast(packet);
 }
 
